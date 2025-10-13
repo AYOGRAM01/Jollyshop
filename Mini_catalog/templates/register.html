@@ -1,0 +1,210 @@
+{% extends 'base.html' %}
+{% block title %}Register - JollyShop{% endblock %}
+{% block content %}
+<style>
+  .register-container {
+    max-width: 500px;
+    margin: 50px auto;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    overflow: hidden;
+  }
+
+  .register-header {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    color: white;
+    padding: 30px;
+    text-align: center;
+  }
+
+  .register-header h1 {
+    margin: 0;
+    font-size: 2.5em;
+    font-weight: 300;
+  }
+
+  .register-form {
+    padding: 40px;
+  }
+
+  .form-group {
+    margin-bottom: 25px;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+  }
+
+  .form-group input[type="text"],
+  .form-group input[type="email"],
+  .form-group input[type="password"] {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #e1e8ed;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+  }
+
+  .form-group input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  }
+
+  .checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e1e8ed;
+  }
+
+  .checkbox-group input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+  }
+
+  .checkbox-group label {
+    margin: 0;
+    font-weight: 500;
+    color: #495057;
+    cursor: pointer;
+  }
+
+  .register-btn {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+  }
+
+  .register-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+  }
+
+  .login-link {
+    text-align: center;
+    margin-top: 25px;
+    padding-top: 25px;
+    border-top: 1px solid #e1e8ed;
+  }
+
+  .login-link a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .login-link a:hover {
+    text-decoration: underline;
+  }
+
+  .errorlist {
+    color: #dc3545;
+    font-size: 14px;
+    margin-top: 5px;
+    list-style: none;
+    padding: 0;
+  }
+
+  .help-text {
+    color: #6c757d;
+    font-size: 14px;
+    margin-top: 5px;
+  }
+</style>
+
+<div class="register-container">
+  <div class="register-header">
+    <h1>Join JollyShop</h1>
+    <p>Create your account to start shopping</p>
+  </div>
+
+  <div class="register-form">
+    <form method="post">
+      {% csrf_token %}
+
+      <div class="form-group">
+        {{ form.username.label_tag }}
+        {{ form.username }}
+        {% if form.username.errors %}
+          <ul class="errorlist">
+            {% for error in form.username.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        {{ form.email.label_tag }}
+        {{ form.email }}
+        {% if form.email.errors %}
+          <ul class="errorlist">
+            {% for error in form.email.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        {{ form.password1.label_tag }}
+        {{ form.password1 }}
+        {% if form.password1.errors %}
+          <ul class="errorlist">
+            {% for error in form.password1.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        {{ form.password2.label_tag }}
+        {{ form.password2 }}
+        {% if form.password2.errors %}
+          <ul class="errorlist">
+            {% for error in form.password2.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+
+      {% if user.is_staff %}
+        <div class="checkbox-group">
+          {{ form.is_staff }}
+          {{ form.is_staff.label_tag }}
+          {% if form.is_staff.help_text %}
+            <div class="help-text">{{ form.is_staff.help_text }}</div>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      <button type="submit" class="register-btn">Create Account</button>
+    </form>
+
+    <div class="login-link">
+      <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}

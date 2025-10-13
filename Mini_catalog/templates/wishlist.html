@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block title %}Wishlist{% endblock %}
+{% block content %}
+<style>
+  .wishlist-hero {
+    text-align: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+    border-radius: 20px;
+    margin-bottom: 30px;
+  }
+
+  .wishlist-hero h1 {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+  }
+
+  .wishlist-items {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    overflow: hidden;
+    margin-bottom: 30px;
+  }
+
+  .wishlist-header {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    color: white;
+    padding: 20px;
+    font-weight: 600;
+  }
+
+  .wishlist-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .wishlist-table th,
+  .wishlist-table td {
+    padding: 20px;
+    text-align: left;
+    border-bottom: 1px solid #f1f3f4;
+  }
+
+  .wishlist-table th {
+    background: #f8f9fa;
+    font-weight: 600;
+    color: #2c3e50;
+  }
+
+  .product-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .product-name {
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0;
+  }
+
+  .product-price {
+    color: #e74c3c;
+    font-weight: bold;
+    font-size: 1.1em;
+  }
+
+  .remove-btn {
+    color: #dc3545;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+  }
+
+  .remove-btn:hover {
+    background: #dc3545;
+    color: white;
+  }
+
+  .add-to-cart-btn {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    margin-left: 10px;
+  }
+
+  .add-to-cart-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+  }
+
+  .empty-wishlist {
+    text-align: center;
+    padding: 80px 20px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  }
+
+  .empty-wishlist-icon {
+    font-size: 4em;
+    color: #ddd;
+    margin-bottom: 20px;
+  }
+
+  .empty-wishlist h2 {
+    color: #666;
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 768px) {
+    .wishlist-table {
+      font-size: 14px;
+    }
+
+    .wishlist-table th,
+    .wishlist-table td {
+      padding: 15px 10px;
+    }
+
+    .product-info {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 5px;
+    }
+
+    .wishlist-hero h1 {
+      font-size: 2em;
+    }
+  }
+</style>
+
+<div class="wishlist-hero">
+  <h1>Your Wishlist</h1>
+  <p>Your saved items for later</p>
+</div>
+
+{% if items %}
+  <div class="wishlist-items">
+    <div class="wishlist-header">
+      <h2>Wishlist Items ({{ items|length }})</h2>
+    </div>
+    <table class="wishlist-table">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Price</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in items %}
+          <tr>
+            <td>
+              <div class="product-info">
+                <div>
+                  <h4 class="product-name">{{ item.product.name }}</h4>
+                  <p>{{ item.product.description|truncatechars:100 }}</p>
+                </div>
+              </div>
+            </td>
+            <td>
+              <span class="product-price">₦{{ item.product.discounted_price|floatformat:'0'|intcomma }}</span>
+              {% if item.product.discount_percentage > 0 %}
+                <br><small style="color: #666; text-decoration: line-through;">₦{{ item.product.price|floatformat:'0'|intcomma }}</small>
+                <small style="color: #e74c3c;"> ({{ item.product.discount_percentage }}% off)</small>
+              {% endif %}
+            </td>
+            <td>
+              <a href="{% url 'add_to_cart' item.product.id %}" class="add-to-cart-btn">Add to Cart</a>
+              <a href="{% url 'remove_from_wishlist' item.id %}" class="remove-btn"
+                 onclick="return confirm('Are you sure you want to remove this item from your wishlist?')">Remove</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div style="text-align: center;">
+    <a href="{% url 'product_list' %}" class="btn">Continue Shopping</a>
+  </div>
+{% else %}
+  <div class="empty-wishlist">
+    <div class="empty-wishlist-icon">❤️</div>
+    <h2>Your wishlist is empty</h2>
+    <p>Looks like you haven't added any items to your wishlist yet.</p>
+    <a href="{% url 'product_list' %}" class="btn">Start Shopping</a>
+  </div>
+{% endif %}
+{% endblock %}

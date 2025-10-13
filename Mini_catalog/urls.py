@@ -1,0 +1,37 @@
+from django.urls import path
+from . import views
+from django.contrib.auth import views as auth_views
+
+urlpatterns = [
+    path("", views.product_list, name="product_list"),
+    path("add/", views.add_product, name="add_product"),
+    path("delete/<int:product_id>/", views.delete_product, name="delete_product"),
+    path("about/", views.about, name="about"),
+    path("contact/", views.contact, name="contact"),
+    path("login/", auth_views.LoginView.as_view(template_name="login.html", next_page="product_list"), name="login"),
+    path("logout/", views.logout_view, name="logout"),
+    path("register/", views.register, name="register"),
+    path("add-to-cart/<int:product_id>/", views.add_to_cart, name="add_to_cart"),
+    path("cart/", views.view_cart, name="view_cart"),
+    path("remove-from-cart/<int:item_id>/", views.remove_from_cart, name="remove_from_cart"),
+    path("increase-quantity/<int:item_id>/", views.increase_quantity, name="increase_quantity"),
+    path("decrease-quantity/<int:item_id>/", views.decrease_quantity, name="decrease_quantity"),
+    path("edit/<int:product_id>/", views.edit_product, name="edit_product"),
+    path("checkout/", views.checkout, name="checkout"),
+    path("dashboard/", views.admin_dashboard, name="admin_dashboard"),
+    path("orders/", views.order_management, name="order_management"),
+    path("orders/approve/<int:order_id>/", views.approve_order, name="approve_order"),
+    path("orders/reject/<int:order_id>/", views.reject_order, name="reject_order"),
+    path("orders/complete/<int:order_id>/", views.complete_order, name="complete_order"),
+    path("contact-messages/", views.contact_messages, name="contact_messages"),
+    path("completed-orders/", views.completed_orders, name="completed_orders"),
+    path("rejected-orders/", views.rejected_orders, name="rejected_orders"),
+    path("order-history/", views.order_history, name="order_history"),
+    path("inbox/", views.inbox, name="inbox"),
+    path("product/<int:product_id>/", views.product_detail, name="product_detail"),
+    path("categories/", views.category_list, name="category_list"),
+    path("wishlist/", views.view_wishlist, name="view_wishlist"),
+    path("add-to-wishlist/<int:product_id>/", views.add_to_wishlist, name="add_to_wishlist"),
+    path("remove-from-wishlist/<int:item_id>/", views.remove_from_wishlist, name="remove_from_wishlist"),
+    path("delete-carousel-image/<int:image_id>/", views.delete_carousel_image, name="delete_carousel_image"),
+]

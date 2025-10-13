@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}Contact Messages - JollyShop{% endblock %}
+{% block content %}
+<div class="container">
+  <h1>Contact Messages</h1>
+  {% if messages %}
+    <table class="messages-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Subject</th>
+          <th>Message</th>
+          <th>Received At</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for msg in messages %}
+          <tr>
+            <td>{{ msg.name }}</td>
+            <td>{{ msg.email }}</td>
+            <td>{{ msg.subject }}</td>
+            <td>{{ msg.message }}</td>
+            <td>{{ msg.created_at|date:"Y-m-d H:i" }}</td>
+            <td>{% if msg.is_read %}Read{% else %}Unread{% endif %}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No contact messages found.</p>
+  {% endif %}
+</div>
+
+<style>
+  .messages-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  .messages-table th, .messages-table td {
+    border: 1px solid #ddd;
+    padding: 12px 15px;
+    text-align: left;
+  }
+  .messages-table th {
+    background: #3498db;
+    color: white;
+  }
+  .messages-table tbody tr:nth-child(even) {
+    background: #f8f9fa;
+  }
+  .messages-table tbody tr:hover {
+    background: #e2e6ea;
+  }
+</style>
+{% endblock %}

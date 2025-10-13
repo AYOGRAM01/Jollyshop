@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block title %}Order Management - JollyShop{% endblock %}
+{% block content %}
+<div class="container">
+  <h1>Order Management</h1>
+  {% if orders %}
+    <table class="orders-table">
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>User</th>
+          <th>Status</th>
+          <th>Total Amount</th>
+          <th>Created At</th>
+          <th>Proof of Payment</th>
+          <th>Items</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in orders %}
+          <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.user.username }}</td>
+            <td>
+              <span class="status-badge status-{{ order.status }}">
+                {{ order.get_status_display }}
+              </span>
+            </td>
+            <td>₦{{ order.total_amount|floatformat:'0'|intcomma }}</td>
+            <td>{{ order.created_at|date:"Y-m-d H:i" }}</td>
+            <td>
+              {% if order.proof_of_payment %}
+                <a href="{{ order.proof_of_payment.url }}" target="_blank" class="btn btn-primary btn-small">View Proof</a>
+              {% else %}
+                <span class="text-muted">No proof uploaded</span>
+              {% endif %}
+            </td>
+            <td>
+              <details>
+                <summary>{{ order.items.count }} item(s)</summary>
+                <ul class="order-items">
+                  {% for item in order.items.all %}
+                    <li>
+                      <strong>{{ item.product.name }}</strong>
+                      (x{{ item.quantity }}) - ₦{{ item.total_price|floatformat:'0'|intcomma }}
+                      <a href="{% url 'product_list' %}?search={{ item.product.name }}" class="btn-small">View Product</a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </details>
+            </td>
+            <td>
+              {% if order.status == 'pending' %}
+                <a href="{% url 'approve_order' order.id %}" class="btn btn-success btn-small">Approve</a>
+                <a href="{% url 'reject_order' order.id %}" class="btn btn-danger btn-small">Reject</a>
+              {% elif order.status == 'approved' %}
+                <a href="{% url 'complete_order' order.id %}" class="btn btn-primary btn-small">Complete</a>
+              {% else %}
+                <span class="text-muted">No actions available</span>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No orders found.</p>
+  {% endif %}
+</div>
+
+<style>
+  .orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  .orders-table th, .orders-table td {
+    border: 1px solid #ddd;
+    padding: 12px 15px;
+    text-align: left;
+    vertical-align: top;
+  }
+  .orders-table th {
+    background: #667eea;
+    color: white;
+  }
+  .orders-table tbody tr:nth-child(even) {
+    background: #f8f9fa;
+  }
+  .orders-table tbody tr:hover {
+    background: #e2e6ea;
+  }
+
+  .status-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  .status-pending { background: #fff3cd; color: #856404; }
+  .status-approved { background: #d1ecf1; color: #0c5460; }
+  .status-rejected { background: #f8d7da; color: #721c24; }
+  .status-completed { background: #d4edda; color: #155724; }
+
+  .order-items {
+    margin: 10px 0;
+    padding-left: 20px;
+  }
+  .order-items li {
+    margin: 5px 0;
+    padding: 5px;
+    background: #f8f9fa;
+    border-radius: 4px;
+  }
+
+  .btn-small {
+    padding: 4px 8px;
+    font-size: 12px;
+    margin: 2px;
+    display: inline-block;
+    text-decoration: none;
+    border-radius: 3px;
+  }
+
+  .btn-success { background: #28a745; color: white; }
+  .btn-danger { background: #dc3545; color: white; }
+  .btn-primary { background: #007bff; color: white; }
+  .btn-success:hover { background: #218838; }
+  .btn-danger:hover { background: #c82333; }
+  .btn-primary:hover { background: #0056b3; }
+
+  .text-muted { color: #6c757d; }
+
+  details {
+    cursor: pointer;
+  }
+  details summary {
+    font-weight: bold;
+    color: #667eea;
+  }
+</style>
+{% endblock %}

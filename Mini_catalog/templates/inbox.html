@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Inbox{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+<div class="card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+    <div class="card-header" style="background: transparent; border-bottom: none;">
+        <h3 class="card-title">
+            <i class="fas fa-inbox"></i> My Inbox
+            {% if unread_count > 0 %}
+                <span class="badge badge-danger">{{ unread_count }} unread</span>
+            {% endif %}
+        </h3>
+    </div>
+    <div class="card-body" style="background: transparent;">
+        {% if messages %}
+            <div class="list-group">
+                {% for message in messages %}
+                    <div class="list-group-item {% if not message.is_read %}list-group-item-primary{% endif %}" style="background: white; color: #333; border-radius: 8px; margin-bottom: 10px;">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ message.subject }}</h5>
+                            <small>{{ message.created_at|date:"M d, Y H:i" }}</small>
+                        </div>
+                        <p class="mb-1">{{ message.message|linebreaks }}</p>
+                        {% if not message.is_read %}
+                            <form method="post" class="d-inline">
+                                {% csrf_token %}
+                                <input type="hidden" name="mark_read" value="{{ message.id }}">
+                                <button type="submit" class="btn btn-sm btn-outline-secondary">
+                                    <i class="fas fa-check"></i> Mark as Read
+                                </button>
+                            </form>
+                        {% else %}
+                            <small class="text-muted"><i class="fas fa-check-circle"></i> Read</small>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">No messages yet</h4>
+                <p class="text-muted">Your inbox is empty. Messages will appear here when you receive updates about your orders.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+        </div>
+    </div>
+</div>
+{% endblock %}

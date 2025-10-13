@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mini Product Catalog</title>
+    {% load humanize %}
+    <style>
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f7f7;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: #fff;
+            text-align: center;
+            padding: 2rem 1rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            animation: slideDown 1s ease-out;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+        }
+
+        header p {
+            margin-top: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Filter box */
+        .filter-box {
+            background: #fff;
+            margin: 2rem auto;
+            padding: 1rem;
+            width: 90%;
+            max-width: 700px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeIn 1.5s ease-in;
+        }
+
+        .filter-box input, .filter-box button {
+            padding: 0.5rem 0.8rem;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .filter-box button {
+            background: #2575fc;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .filter-box button:hover {
+            background: #1a5cd8;
+        }
+
+        /* Product grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1.5rem;
+            padding: 1.5rem;
+        }
+
+        .product-card {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            animation: fadeUp 1s ease forwards;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .product-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .product-card h2 {
+            margin: 0.8rem;
+            font-size: 1.4rem;
+        }
+
+        .product-card p {
+            margin: 0.5rem 0.8rem;
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        .badge {
+            display: inline-block;
+            margin: 0.8rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .in-stock {
+            background: #e1f8e6;
+            color: #2e7d32;
+        }
+
+        .out-stock {
+            background: #ffe6e6;
+            color: #c62828;
+        }
+
+        /* Action buttons */
+        .actions {
+            margin: 0.8rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .actions a {
+            text-decoration: none;
+            padding: 0.4rem 0.7rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .actions a.edit {
+            background: #ffb74d;
+            color: #fff;
+        }
+
+        .actions a.edit:hover {
+            background: #f57c00;
+            transform: scale(1.05);
+        }
+
+        .actions a.delete {
+            background: #e57373;
+            color: #fff;
+        }
+
+        .actions a.delete:hover {
+            background: #d32f2f;
+            transform: scale(1.05);
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background: #f1f1f1;
+            color: #555;
+            font-size: 0.9rem;
+            margin-top: 2rem;
+        }
+
+        /* Animations */
+        @keyframes slideDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <h1>Welcome to Mini Product Catalog</h1>
+        <p>Manage products easily – add, update, delete, and view.</p>
+    </header>
+
+    <!-- Filter Section -->
+    <section class="filter-box">
+        <form method="get" action="">
+            <input type="number" name="min_price" placeholder="Min Price">
+            <input type="number" name="max_price" placeholder="Max Price">
+            <button type="submit">Filter</button>
+        </form>
+    </section>
+
+    <!-- Product Grid -->
+    <main class="grid">
+        {% for product in products %}
+            <div class="product-card">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                <h2>{{ product.name }}</h2>
+                <p>Price: ₦{{ product.price|floatformat:'0'|intcomma }}</p>
+                <p>{{ product.description }}</p>
+
+                {% if product.in_stock %}
+                    <span class="badge in-stock">In Stock</span>
+                {% else %}
+                    <span class="badge out-stock">Out of Stock</span>
+                {% endif %}
+
+                <!-- Actions -->
+                <div class="actions">
+                    <a href="{% url 'update_product' product.id %}" class="edit">✏ Edit</a>
+                    <a href="{% url 'delete_product' product.id %}" class="delete">🗑 Delete</a>
+                </div>
+            </div>
+        {% empty %}
+            <p style="grid-column: 1 / -1; text-align:center; color:#777;">No products found.</p>
+        {% endfor %}
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        &copy; {{ year }} Mini Product Catalog | Built by Ayoola
+    </footer>
+
+</body>
+</html>

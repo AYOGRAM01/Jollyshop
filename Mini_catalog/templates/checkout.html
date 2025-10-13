@@ -1,0 +1,300 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block title %}Checkout - JollyShop{% endblock %}
+{% block content %}
+<style>
+  .checkout-container {
+    max-width: 800px;
+    margin: 50px auto;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    overflow: hidden;
+  }
+
+  .checkout-header {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    color: white;
+    padding: 30px;
+    text-align: center;
+  }
+
+  .checkout-header h1 {
+    margin: 0;
+    font-size: 2.5em;
+    font-weight: 300;
+  }
+
+  .checkout-content {
+    padding: 40px;
+  }
+
+  .order-summary {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 25px;
+    margin-bottom: 30px;
+  }
+
+  .order-summary h2 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+  }
+
+  .order-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #e1e8ed;
+  }
+
+  .order-item:last-child {
+    border-bottom: none;
+  }
+
+  .item-details {
+    flex: 1;
+  }
+
+  .item-name {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 5px;
+  }
+
+  .item-quantity {
+    color: #6c757d;
+    font-size: 0.9em;
+  }
+
+  .item-price {
+    font-weight: 600;
+    color: #e74c3c;
+  }
+
+  .order-total {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  .order-total h3 {
+    margin: 0;
+    font-size: 1.8em;
+    font-weight: 300;
+  }
+
+  .payment-details {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+  }
+
+  .payment-details h2 {
+    margin-bottom: 20px;
+    font-size: 1.8em;
+    font-weight: 300;
+  }
+
+  .payment-info {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 25px;
+    margin-bottom: 20px;
+  }
+
+  .payment-info h3 {
+    margin: 0 0 15px 0;
+    font-size: 1.2em;
+    font-weight: 400;
+  }
+
+  .account-detail {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .account-detail:last-child {
+    border-bottom: none;
+  }
+
+  .account-label {
+    font-weight: 600;
+    opacity: 0.9;
+  }
+
+  .account-value {
+    font-weight: 300;
+    font-size: 1.1em;
+    letter-spacing: 1px;
+  }
+
+  .payment-instructions {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+  }
+
+  .payment-instructions h3 {
+    margin: 0 0 15px 0;
+    font-size: 1.2em;
+  }
+
+  .payment-instructions ol {
+    text-align: left;
+    padding-left: 20px;
+  }
+
+  .payment-instructions li {
+    margin-bottom: 10px;
+    line-height: 1.5;
+  }
+
+  .confirm-payment-btn {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+  }
+
+  .confirm-payment-btn:hover {
+    background: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+  }
+
+  .back-to-cart {
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  .back-to-cart a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .back-to-cart a:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    .checkout-container {
+      margin: 20px;
+    }
+
+    .checkout-content {
+      padding: 20px;
+    }
+
+    .order-item {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .account-detail {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 5px;
+    }
+  }
+</style>
+
+<div class="checkout-container">
+  <div class="checkout-header">
+    <h1>Checkout</h1>
+    <p>Complete your purchase</p>
+  </div>
+
+  <div class="checkout-content">
+    <div class="order-summary">
+      <h2>Order Summary</h2>
+      {% for item in items %}
+        <div class="order-item">
+          <div class="item-details">
+            <div class="item-name">{{ item.product.name }}</div>
+            <div class="item-quantity">Quantity: {{ item.quantity }}</div>
+          </div>
+          <div class="item-price">₦{{ item.total_price|floatformat:'0'|intcomma }}</div>
+        </div>
+      {% endfor %}
+
+      <div class="order-total">
+        <h3>Total: ₦{{ total|floatformat:'0'|intcomma }}</h3>
+      </div>
+    </div>
+
+    <div class="payment-details">
+      <h2>Payment Information</h2>
+      <div class="payment-info">
+        <h3>Transfer Details</h3>
+        <div class="account-detail">
+          <span class="account-label">Account Number:</span>
+          <span class="account-value">{{ account_number }}</span>
+        </div>
+        <div class="account-detail">
+          <span class="account-label">Bank:</span>
+          <span class="account-value">{{ bank_name }}</span>
+        </div>
+        <div class="account-detail">
+          <span class="account-label">Account Name:</span>
+          <span class="account-value">{{ account_name }}</span>
+        </div>
+        <div class="account-detail">
+          <span class="account-label">Amount:</span>
+          <span class="account-value">₦{{ total|floatformat:'0'|intcomma }}</span>
+        </div>
+      </div>
+
+      <div class="payment-instructions">
+        <h3>Payment Instructions:</h3>
+        <ol>
+          <li>Copy the account details above</li>
+          <li>Transfer the exact amount (₦{{ total|floatformat:'0'|intcomma }}) to the account</li>
+          <li>Take a screenshot of the successful transaction</li>
+          <li>Send the screenshot to our customer service</li>
+          <li>Your order will be processed once payment is confirmed</li>
+        </ol>
+      </div>
+
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="delivery-address" style="background: rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+          <h3 style="margin: 0 0 15px 0; color: white;">De alivery Address</h3>
+          <textarea name="delivery_address" rows="4" placeholder="Enter your full delivery address..." required style="width: 100%; padding: 10px; border: none; border-radius: 5px; font-size: 14px;"></textarea>
+        </div>
+
+        <div class="proof-upload" style="background: rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+          <h3 style="margin: 0 0 15px 0; color: white;">Upload Proof of Payment</h3>
+          <input type="file" name="proof_of_payment" accept="image/*" required style="width: 100%; padding: 10px; border: none; border-radius: 5px; font-size: 14px;">
+          <small style="color: rgba(255,255,255,0.8); display: block; margin-top: 5px;">Please upload a screenshot or photo of your payment confirmation</small>
+        </div>
+
+        <!-- ✅ Checkout button -->
+        <button type="submit" class="confirm-payment-btn">Confirm & Checkout</button>
+      </form>
+    <div class="back-to-cart">
+      <a href="{% url 'view_cart' %}">← Back to Cart</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

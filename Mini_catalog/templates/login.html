@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+{% block title %}Login - JollyShop{% endblock %}
+{% block content %}
+<style>
+  .login-container {
+    max-width: 500px;
+    margin: 50px auto;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    overflow: hidden;
+  }
+
+  .login-header {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    color: white;
+    padding: 30px;
+    text-align: center;
+  }
+
+  .login-header h1 {
+    margin: 0;
+    font-size: 2.5em;
+    font-weight: 300;
+  }
+
+  .login-form {
+    padding: 40px;
+  }
+
+  .form-group {
+    margin-bottom: 25px;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+  }
+
+  .form-group input[type="text"],
+  .form-group input[type="password"] {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #e1e8ed;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+  }
+
+  .form-group input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  }
+
+  .password-wrapper {
+    position: relative;
+  }
+
+  .toggle-password {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #666;
+    font-size: 14px;
+    user-select: none;
+  }
+
+  .login-btn {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+  }
+
+  .login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+  }
+
+  .register-link {
+    text-align: center;
+    margin-top: 25px;
+    padding-top: 25px;
+    border-top: 1px solid #e1e8ed;
+  }
+
+  .register-link a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .register-link a:hover {
+    text-decoration: underline;
+  }
+
+  .errorlist {
+    color: #dc3545;
+    font-size: 14px;
+    margin-top: 5px;
+    list-style: none;
+    padding: 0;
+  }
+</style>
+
+<div class="login-container">
+  <div class="login-header">
+    <h1>Welcome Back</h1>
+    <p>Login to your JollyShop account</p>
+  </div>
+
+  <div class="login-form">
+    <form method="post" autocomplete="on">
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label for="id_username">Username:</label>
+        <input type="text" name="username" id="id_username" autocomplete="username" required />
+        {% if form.username.errors %}
+          <ul class="errorlist">
+            {% for error in form.username.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label for="id_password">Password:</label>
+        <div class="password-wrapper">
+          <input type="password" name="password" id="id_password" autocomplete="current-password" required />
+          <span class="toggle-password" onclick="togglePassword()">Show</span>
+        </div>
+        {% if form.password.errors %}
+          <ul class="errorlist">
+            {% for error in form.password.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+
+      <button type="submit" class="login-btn">Login</button>
+    </form>
+
+    <div class="register-link">
+      <p>Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
+    </div>
+  </div>
+</div>
+
+<script>
+function togglePassword() {
+    const passwordInput = document.getElementById('id_password');
+    const toggleText = document.querySelector('.toggle-password');
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleText.textContent = 'Hide';
+    } else {
+        passwordInput.type = 'password';
+        toggleText.textContent = 'Show';
+    }
+}
+</script>
+{% endblock %}

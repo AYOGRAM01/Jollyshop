@@ -1,0 +1,3 @@
+- [ ] Add Font Awesome CDN link to the head section of base.html
+- [ ] Add footer HTML structure with copyright and social media icons after the content div
+- [ ] Add CSS styles for the footer in the style block

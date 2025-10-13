@@ -1,0 +1,425 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}JollyShop - Your Fashion Destination{% endblock %}</title>
+    
+    <!-- ✅ Favicon and Logo -->
+    <link rel="icon" type="image/png" href="{% static 'images/Jollyshop.jpg' %}">
+    <link rel="shortcut icon" href="{% static 'images/Jollyshop.jpg' %}">
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #8e44ad 0%, #2c3e50 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: fadeIn 1s ease;
+        }
+
+        .navbar .logo img {
+            height: 40px;
+            width: auto;
+            border-radius: 10px;
+        }
+
+        .navbar .logo span {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #764ba2;
+        }
+
+        .navbar .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .navbar a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar a:hover {
+            background: linear-gradient(45deg, #8e44ad, #764ba2);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .navbar .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .navbar .user-info span {
+            color: #8e44ad;
+            font-weight: 600;
+        }
+
+        .navbar .cart-badge {
+            position: relative;
+        }
+
+        .navbar .cart-badge::after {
+            content: attr(data-count);
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 12px;
+            font-weight: bold;
+            display: {% if cart_items_count %}block{% else %}none{% endif %};
+        }
+
+        .content {
+            min-height: calc(100vh - 80px);
+            background: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1, h2, h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #8e44ad, #764ba2);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(142, 68, 173, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .navbar .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+
+        /* Message Popup Styles */
+        .message-popup {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            max-width: 400px;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .message-content {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-left: 4px solid;
+        }
+
+        .message-content.success {
+            border-left-color: #28a745;
+        }
+
+        .message-content.warning {
+            border-left-color: #ffc107;
+        }
+
+        .message-content.error {
+            border-left-color: #dc3545;
+        }
+
+        .message-content.info {
+            border-left-color: #17a2b8;
+        }
+
+        .message-text {
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .message-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #666;
+            padding: 0;
+            margin-left: 10px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .message-close:hover {
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 480px) {
+            .message-popup {
+                left: 10px;
+                right: 10px;
+                max-width: none;
+            }
+
+            .message-content {
+                padding: 12px 15px;
+            }
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px 30px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer .copyright {
+            color: #2c3e50;
+            font-size: 14px;
+        }
+
+        .footer .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .footer .social-icons a {
+            color: #764ba2;
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .footer .social-icons a:hover {
+            color: #8e44ad;
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <img src="{% static 'images/Jollyshop.jpg' %}" alt="JollyShop Logo">
+            <span>JollyShop</span>
+        </div>
+        <div class="nav-links">
+            <a href="{% url 'product_list' %}">Home</a>
+            <a href="{% url 'about' %}">About</a>
+            <a href="{% url 'contact' %}">Contact</a>
+        </div>
+        <div class="nav-links user-info">
+            {% if user.is_authenticated and not user.is_anonymous %}
+                <span>Welcome, {{ user.username }}!</span>
+                {% if not user.is_staff %}
+                    <a href="{% url 'inbox' %}">Inbox</a>
+                    <a href="{% url 'view_cart' %}" class="cart-badge" data-count="{{ cart_items_count }}">Cart</a>
+                    <a href="{% url 'view_wishlist' %}">Wishlist</a>
+                {% endif %}
+                <a href="{% url 'logout' %}" onclick="return confirm('Are you sure you want to logout?')">Logout</a>
+                {% if user.is_staff %}
+                    <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">Dashboard</a>
+                    <a href="{% url 'order_management' %}" class="btn btn-secondary">Orders</a>
+                    <a href="{% url 'contact_messages' %}" class="btn btn-secondary">Messages</a>
+                    <a href="/admin/" class="btn btn-secondary">Admin Panel</a>
+                {% endif %}
+            {% else %}
+                <a href="{% url 'login' %}">Login</a>
+                <a href="{% url 'register' %}">Register</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="content">
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="copyright">
+                &copy; 2025 JollyShop. All rights reserved.
+            </div>
+            <div class="social-icons">
+                <a href="https://www.facebook.com/share/16A7QfD5Bg/" title="Facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.instagram.com/ayogram_1?igsh=MTZodTMyY255cHh6aw==" title="Instagram" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://x.com/ayogram_01?t=WucJrnkUXLJx-KQOdCGoXg&s=08" title="Twitter" target="_blank"><i class="fab fa-twitter"></i></a>
+                <a href="https://www.linkedin.com/in/waliyi-balogun-8045a930b?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" title="LinkedIn" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Success Message Popup -->
+    {% if messages %}
+      <div id="message-popup" class="message-popup">
+        {% for message in messages %}
+          <div class="message-content {{ message.tags }}">
+            <span class="message-text">{{ message }}</span>
+            <button class="message-close" onclick="closeMessagePopup()">&times;</button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <script>
+      function closeMessagePopup() {
+        document.getElementById('message-popup').style.display = 'none';
+      }
+
+      // Auto-hide popup after 5 seconds
+      setTimeout(function() {
+        const popup = document.getElementById('message-popup');
+        if (popup) {
+          popup.style.display = 'none';
+        }
+      }, 5000);
+    </script>
+</body>
+</html>

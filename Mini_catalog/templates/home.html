@@ -1,0 +1,774 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block title %}Mini Product Catalog{% endblock %}
+{% block content %}
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+  }
+
+  /* Carousel Styles */
+  .carousel {
+    position: relative;
+    width: 50%;
+    height: 300px;
+    overflow: hidden;
+    margin: 0 auto 20px auto;
+  }
+
+  .carousel-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .carousel-item {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.6s ease-in-out;
+  }
+
+  .carousel-item.active {
+    opacity: 1;
+  }
+
+  .carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .carousel-caption-below {
+    text-align: center;
+    margin: 10px auto 20px auto;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #f0f0f5;
+    font-weight: 600;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1.1em;
+    padding: 15px 25px;
+    border-radius: 12px;
+    width: 40%;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.6);
+  }
+
+  .carousel-indicators {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+  }
+
+  .indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+  }
+
+  .indicator.active {
+    background: white;
+  }
+
+  .carousel-control {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease;
+  }
+
+  .carousel-control:hover {
+    background: rgba(0, 0, 0, 0.8);
+  }
+
+  .carousel-control.prev {
+    left: 10px;
+  }
+
+  .carousel-control.next {
+    right: 10px;
+  }
+
+  /* Navigation Styles */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+  }
+
+  .nav-item {
+    text-align: center;
+    color: #667eea;
+    text-decoration: none;
+    flex: 1;
+  }
+
+  .nav-item i {
+    font-size: 20px;
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  .nav-item.active {
+    color: #764ba2;
+  }
+
+  /* Flash Sales Styles */
+  .flash-sales {
+    background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+    color: white;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .flash-sales h3 {
+    margin: 0;
+  }
+
+  .countdown {
+    font-weight: bold;
+  }
+
+  /* Promotional Banners */
+  .promo-banners {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .promo-banner {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    position: relative;
+  }
+
+  .promo-banner h4 {
+    margin: 0 0 10px 0;
+    font-size: 18px;
+  }
+
+  .promo-banner p {
+    margin: 0;
+    font-size: 14px;
+  }
+
+  /* Main Content */
+  .main-content {
+    padding: 20px;
+  }
+
+  .filter-form {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    margin-bottom: 40px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .filter-form select,
+  .filter-form input {
+    padding: 12px 15px;
+    border: 2px solid #e1e8ed;
+    border-radius: 8px;
+    font-size: 16px;
+    min-width: 150px;
+  }
+
+  .filter-form input:focus,
+  .filter-form select:focus {
+    outline: none;
+    border-color: #667eea;
+  }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px;
+    margin-top: 20px;
+  }
+
+  .product-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .discount-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #e74c3c;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    z-index: 10;
+  }
+
+  .product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+  }
+
+  .product-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .product-link:hover {
+    text-decoration: none;
+    color: inherit;
+  }
+
+
+
+  .product-body {
+    padding: 20px;
+  }
+
+  .product-description {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+    padding: 15px;
+    border-radius: 10px;
+    color: #333;
+    margin-bottom: 15px;
+    line-height: 1.5;
+    border-left: 4px solid #667eea;
+  }
+
+  .product-price {
+    font-size: 1.6em;
+    font-weight: bold;
+    color: #e74c3c;
+    margin-bottom: 10px;
+  }
+
+  .original-price {
+    text-decoration: line-through;
+    color: #999;
+    margin-right: 10px;
+  }
+
+  .discounted-price {
+    color: #28a745;
+    font-weight: bold;
+  }
+
+  .product-name {
+    font-size: 1.4em;
+    font-weight: 600;
+    color: #333;
+    margin-top: 15px;
+    text-align: center;
+  }
+
+  .rating {
+    color: gold;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  .product-status {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .product-status.in-stock {
+    background: #d4edda;
+    color: #155724;
+  }
+
+  .product-status.out-of-stock {
+    background: #f8d7da;
+    color: #721c24;
+  }
+
+  .product-actions {
+    padding: 20px;
+    padding-top: 0;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .product-actions .btn {
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+  }
+
+  .product-actions a {
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+  }
+
+  .btn-add-cart {
+    background: linear-gradient(45deg, #28a745, #20c997);
+  }
+
+  .btn-add-cart:hover {
+    background: linear-gradient(45deg, #218838, #1aa085);
+  }
+
+  .btn-delete {
+    background: linear-gradient(45deg, #dc3545, #fd7e14);
+  }
+
+  .btn-delete:hover {
+    background: linear-gradient(45deg, #c82333, #e8680d);
+  }
+
+  .btn-wishlist {
+    background: linear-gradient(45deg, #e91e63, #f06292);
+  }
+
+  .btn-wishlist:hover {
+    background: linear-gradient(45deg, #c2185b, #e91e63);
+  }
+
+  .no-products {
+    text-align: center;
+    padding: 80px 20px;
+    color: #666;
+    font-size: 1.2em;
+  }
+
+  .no-products i {
+    font-size: 4em;
+    color: #ddd;
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 768px) {
+    .filter-form {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .filter-form select,
+    .filter-form input {
+      min-width: auto;
+    }
+
+    .products-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .hero-section h1 {
+      font-size: 2em;
+    }
+  }
+</style>
+
+<!-- Carousel Section -->
+<div class="carousel">
+  <div class="carousel-inner">
+    {% for image in photo %}
+      <div class="carousel-item {% if forloop.first %}active{% endif %}">
+        <img src="{{ image.imagee.url }}" alt="{{ image.title }}">
+      </div>
+    {% empty %}
+      <div class="carousel-item active">
+        <img src="https://via.placeholder.com/800x300/667eea/ffffff?text=No+Images+Available" alt="No Images">
+      </div>
+    {% endfor %}
+  </div>
+  <button class="carousel-control prev" onclick="prevSlide()">&#10094;</button>
+  <button class="carousel-control next" onclick="nextSlide()">&#10095;</button>
+  <div class="carousel-indicators">
+    {% for image in photo %}
+      <span class="indicator {% if forloop.first %}active{% endif %}" onclick="currentSlide({{ forloop.counter }})"></span>
+    {% empty %}
+      <span class="indicator active" onclick="currentSlide(1)"></span>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Promotional Banners -->
+<div class="promo-banners">
+  <button type="button" class="promo-banner" onclick="toggleAmazingDiscounts()">
+    <h4>Awoof Deals</h4>
+    <p>Amazing discounts</p>
+  </button>
+  <button type="button" class="promo-banner" onclick="toggleClearanceSales()">
+    <h4>Clearance Sales</h4>
+    <p>Up to 80% Off</p>
+  </button>
+  <button type="button" class="promo-banner" onclick="toggleEarnWhileShopping()">
+    <h4>Earn While You Shop</h4>
+    <p>Join Now</p>
+  </button>
+  <button type="button" class="promo-banner" onclick="toggleBuy2Pay1()">
+    <h4>Buy 2 Pay for 1</h4>
+    <p>Limited time offer</p>
+  </button>
+</div>
+
+<!-- Amazing Discounts Section -->
+<div id="amazing-discounts" style="display: none; margin-bottom: 20px;">
+  <h3 style="text-align: center; margin-bottom: 20px;">🔥 Amazing Discounts</h3>
+  <div class="products-grid">
+    {% for product in products %}
+      {% if product.discount_percentage > 0 %}
+      <div class="product-card">
+        {% if product.discount_percentage > 0 %}
+          <div class="discount-badge">{{ product.discount_percentage }}% Off</div>
+        {% endif %}
+        <div class="product-body">
+          <a href="{% url 'product_detail' product.id %}" class="product-link">
+            {% if product.image %}
+              <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width: 100%; height: auto; margin-bottom: 15px;">
+            {% endif %}
+              {% if product.discount_percentage > 0 %}
+                <p class="product-price">
+                  <span class="discounted-price">₦{{ product.discounted_price|floatformat:'0'|intcomma }}</span><br>
+                  <span class="original-price">₦{{ product.price|floatformat:'0'|intcomma }}</span>
+                </p>
+              {% else %}
+                <p class="product-price">₦{{ product.price|floatformat:'0'|intcomma }}</p>
+              {% endif %}
+            <span class="product-status {% if product.in_stock %}in-stock{% else %}out-of-stock{% endif %}">
+              {% if product.in_stock %}✓ In Stock{% else %}✗ Out of Stock{% endif %}
+            </span>
+            <h3 class="product-name">{{ product.name }}</h3>
+            <div class="rating">{{ product.get_star_rating }}</div>
+            </a>
+          </div>
+        </div>
+      {% endif %}
+    {% empty %}
+      <div class="no-products">
+        <div>🏷️</div>
+        <p>No amazing discounts available right now.</p>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Clearance Sales Section -->
+<div id="clearance-sales" style="display: none; margin-bottom: 20px;">
+  <h3 style="text-align: center; margin-bottom: 20px;">🛍️ Clearance Sales - Up to 80% Off</h3>
+  <div class="products-grid">
+    {% for product in products %}
+      {% if product.discount_percentage >= 50 %}
+      <div class="product-card">
+        {% if product.discount_percentage > 0 %}
+          <div class="discount-badge">{{ product.discount_percentage }}% Off</div>
+        {% endif %}
+        <div class="product-body">
+          <a href="{% url 'product_detail' product.id %}" class="product-link">
+            {% if product.image %}
+              <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width: 100%; height: auto; margin-bottom: 15px;">
+            {% endif %}
+              {% if product.discount_percentage > 0 %}
+                <p class="product-price">
+                  <span class="discounted-price">₦{{ product.discounted_price|floatformat:'0'|intcomma }}</span><br>
+                  <span class="original-price">₦{{ product.price|floatformat:'0'|intcomma }}</span>
+                </p>
+              {% else %}
+                <p class="product-price">₦{{ product.price|floatformat:'0'|intcomma }}</p>
+              {% endif %}
+              <span class="product-status {% if product.in_stock %}in-stock{% else %}out-of-stock{% endif %}">
+                {% if product.in_stock %}✓ In Stock{% else %}✗ Out of Stock{% endif %}
+              </span>
+              <h3 class="product-name">{{ product.name }}</h3>
+              <div class="rating">{{ product.get_star_rating }}</div>
+            </a>
+          </div>
+        </div>
+      {% endif %}
+    {% empty %}
+      <div class="no-products">
+        <div>🛒</div>
+        <p>No clearance sales available right now.</p>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Earn While Shopping Section -->
+<div id="earn-while-shopping" style="display: none; margin-bottom: 20px; text-align: center; background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 40px 20px; border-radius: 15px;">
+  <h3 style="margin-bottom: 20px;">💰 Earn While You Shop</h3>
+  <p style="font-size: 18px; margin-bottom: 20px;">Join our loyalty program and earn points on every purchase!</p>
+  <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+    <h4>Program Benefits:</h4>
+    <ul style="list-style: none; padding: 0;">
+      <li>✅ Earn 1 point for every ₦100 spent</li>
+      <li>✅ Redeem 100 points for ₦50 discount</li>
+      <li>✅ Exclusive member-only deals</li>
+      <li>✅ Early access to sales</li>
+    </ul>
+  </div>
+  {% if user.is_authenticated %}
+    <p style="font-size: 16px;">Welcome back! You're already earning points on your purchases.</p>
+  {% else %}
+    <a href="{% url 'register' %}" style="background: #28a745; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold;">Join Now - It's Free!</a>
+  {% endif %}
+</div>
+
+<!-- Buy 2 Pay for 1 Section -->
+<div id="buy2pay1" style="display: none; margin-bottom: 20px;">
+  <h3 style="text-align: center; margin-bottom: 20px;">🎉 Buy 2 Pay for 1 - Limited Time Offer</h3>
+  <div style="background: linear-gradient(45deg, #ff6b6b, #ee5a24); color: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; text-align: center;">
+    <h4>Special BOGO Deals!</h4>
+    <p>Buy any 2 items from selected products and pay for only 1!</p>
+    <p style="font-size: 14px; opacity: 0.9;">*Offer valid while stocks last</p>
+  </div>
+  <div class="products-grid">
+    {% for product in products %}
+      {% if product.price >= 20 and product.price <= 100 %}
+      <div class="product-card">
+        <div class="discount-badge">BOGO</div>
+        <div class="product-body">
+          <a href="{% url 'product_detail' product.id %}" class="product-link">
+            {% if product.image %}
+              <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width: 100%; height: auto; margin-bottom: 15px;">
+            {% endif %}
+              <p class="product-price">₦{{ product.price|floatformat:'0'|intcomma }}</p>
+              <span class="product-status {% if product.in_stock %}in-stock{% else %}out-of-stock{% endif %}">
+                {% if product.in_stock %}✓ In Stock{% else %}✗ Out of Stock{% endif %}
+              </span>
+              <h3 class="product-name">{{ product.name }}</h3>
+              <div class="rating">{{ product.get_star_rating }}</div>
+              <p style="color: #e74c3c; font-weight: bold; font-size: 14px;">Buy 2, Pay for 1!</p>
+            </a>
+          </div>
+        </div>
+      {% endif %}
+    {% empty %}
+      <div class="no-products">
+        <div>🎁</div>
+        <p>No BOGO offers available right now.</p>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Flash Sales Section -->
+<div class="flash-sales">
+  <div>
+    <h3>🔥 Flash Sales</h3>
+    <p>TIME LEFT: <span class="countdown" id="countdown">00h : 27m : 06s</span></p>
+  </div>
+  <a href="#" style="color: white; text-decoration: none; font-weight: bold;">See All</a>
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
+  <!-- Filter Form -->
+  <form method="get" class="filter-form">
+    <select name="category">
+      <option value="">All Categories</option>
+      {% for category in categories %}
+        <option value="{{ category.id }}" {% if selected_category == category.id|stringformat:"s" %}selected{% endif %}>
+          {{ category.name }}
+        </option>
+      {% endfor %}
+    </select>
+
+    <input type="number" step="0.01" name="min_price" value="{{ min_price }}" placeholder="Min Price">
+    <input type="number" step="0.01" name="max_price" value="{{ max_price }}" placeholder="Max Price">
+
+    <input type="text" name="search" value="{{ search }}" placeholder="Search products...">
+
+    <button type="submit" class="btn">Filter Products</button>
+  </form>
+
+  <!-- Product Grid -->
+  <div class="products-grid">
+    {% for product in products %}
+      <div class="product-card">
+        {% if product.discount_percentage > 0 %}
+          <div class="discount-badge">{{ product.discount_percentage }}% Off</div>
+        {% endif %}
+        <div class="product-body">
+          <a href="{% url 'product_detail' product.id %}" class="product-link">
+            {% if product.image %}
+              <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width: 100%; height: auto; margin-bottom: 15px;">
+            {% endif %}
+            {% if product.discount_percentage > 0 %}
+              <p class="product-price">
+                <span class="discounted-price">₦{{ product.discounted_price|floatformat:'0'|intcomma }}</span><br>
+                <span class="original-price">₦{{ product.price|floatformat:'0'|intcomma }}</span>
+              </p>
+            {% else %}
+              <p class="product-price">₦{{ product.price|floatformat:'0'|intcomma }}</p>
+            {% endif %}
+            <span class="product-status {% if product.in_stock %}in-stock{% else %}out-of-stock{% endif %}">
+              {% if product.in_stock %}✓ In Stock{% else %}✗ Out of Stock{% endif %}
+            </span>
+            <h3 class="product-name">{{ product.name }}</h3>
+            <div class="rating">{{ product.get_star_rating }}</div>
+          </a>
+        </div>
+      </div>
+    {% empty %}
+      <div class="no-products">
+        <div>📦</div>
+        <p>No products available yet.</p>
+        {% if user.is_staff %}
+          <p><a href="{% url 'add_product' %}" class="btn">Add Your First Product</a></p>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+
+
+<script>
+  // Carousel functionality
+  let currentSlideIndex = 1;
+  const totalSlides = {{ photo|length|default:1 }};
+
+  function showSlide(n) {
+    const slides = document.querySelectorAll('.carousel-item');
+    const indicators = document.querySelectorAll('.indicator');
+
+    if (n > totalSlides) currentSlideIndex = 1;
+    if (n < 1) currentSlideIndex = totalSlides;
+
+    slides.forEach(slide => slide.classList.remove('active'));
+    indicators.forEach(indicator => indicator.classList.remove('active'));
+
+    slides[currentSlideIndex - 1].classList.add('active');
+    indicators[currentSlideIndex - 1].classList.add('active');
+  }
+
+  function currentSlide(n) {
+    showSlide(currentSlideIndex = n);
+  }
+
+  function nextSlide() {
+    showSlide(currentSlideIndex += 1);
+  }
+
+  function prevSlide() {
+    showSlide(currentSlideIndex -= 1);
+  }
+
+  // Initialize first slide and caption
+  showSlide(1);
+
+  // Auto-advance carousel
+  if (totalSlides > 1) {
+    setInterval(() => {
+      currentSlideIndex++;
+      showSlide(currentSlideIndex);
+    }, 5000);
+  }
+
+  // Countdown timer
+  function updateCountdown() {
+    const countdownElement = document.getElementById('countdown');
+    const now = new Date();
+    const endOfDay = new Date(now);
+    endOfDay.setHours(23, 59, 59, 999);
+    const diff = endOfDay - now;
+    if (diff <= 0) {
+      countdownElement.textContent = 'EXPIRED';
+      return;
+    }
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    countdownElement.textContent = `${hours.toString().padStart(2, '0')}h : ${minutes.toString().padStart(2, '0')}m : ${seconds.toString().padStart(2, '0')}s`;
+  }
+
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+
+  // Toggle promotional sections
+  function toggleAmazingDiscounts() {
+    console.log('Toggle amazing discounts called');
+    const section = document.getElementById('amazing-discounts');
+    toggleSection(section);
+  }
+
+  function toggleClearanceSales() {
+    console.log('Toggle clearance sales called');
+    const section = document.getElementById('clearance-sales');
+    toggleSection(section);
+  }
+
+  function toggleEarnWhileShopping() {
+    console.log('Toggle earn while shopping called');
+    const section = document.getElementById('earn-while-shopping');
+    toggleSection(section);
+  }
+
+  function toggleBuy2Pay1() {
+    console.log('Toggle buy 2 pay 1 called');
+    const section = document.getElementById('buy2pay1');
+    toggleSection(section);
+  }
+
+  function toggleSection(section) {
+    if (section.style.display === 'none' || section.style.display === '') {
+      section.style.display = 'block';
+      // Scroll to the section
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      section.style.display = 'none';
+    }
+  }
+
+
+</script>
+{% endblock %}
