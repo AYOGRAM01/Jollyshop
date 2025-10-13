@@ -8,8 +8,8 @@
     <title>{% block title %}JollyShop - Your Fashion Destination{% endblock %}</title>
     
     <!-- ✅ Favicon and Logo -->
-    <link rel="icon" type="image/png" href="{% static 'images/Jollyshop.jpg' %}">
-    <link rel="shortcut icon" href="{% static 'images/Jollyshop.jpg' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}">
 
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -39,6 +39,17 @@
             position: sticky;
             top: 0;
             z-index: 1000;
+        }
+
+        @media (min-width: 769px) {
+            .navbar {
+                transform: skew(-10deg);
+            }
+
+            .navbar .logo,
+            .navbar .nav-links {
+                transform: skew(10deg);
+            }
         }
 
         .navbar .logo {
@@ -191,7 +202,6 @@
 
         @media (max-width: 768px) {
             .navbar {
-                flex-direction: column;
                 gap: 15px;
             }
 

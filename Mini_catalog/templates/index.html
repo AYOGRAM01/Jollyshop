@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -193,6 +194,76 @@
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            header {
+                padding: 1.5rem 1rem;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+
+            header p {
+                font-size: 1rem;
+            }
+
+            .filter-box {
+                width: 95%;
+                padding: 0.8rem;
+                flex-direction: column;
+                gap: 0.8rem;
+            }
+
+            .filter-box input, .filter-box button {
+                width: 100%;
+                padding: 0.6rem;
+            }
+
+            .grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                padding: 1rem;
+            }
+
+            .product-card {
+                margin: 0 auto;
+            }
+
+            .product-card h2 {
+                font-size: 1.2rem;
+            }
+
+            .actions {
+                flex-direction: column;
+                gap: 0.3rem;
+            }
+
+            .actions a {
+                padding: 0.3rem 0.5rem;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+                padding: 0.5rem;
+            }
+
+            .product-card img {
+                height: 150px;
+            }
+
+            footer {
+                padding: 0.8rem;
+                font-size: 0.85rem;
+            }
         }
     </style>
 </head>
