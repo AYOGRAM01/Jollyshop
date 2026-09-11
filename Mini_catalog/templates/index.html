@@ -260,9 +260,70 @@
                 height: 150px;
             }
 
+            .product-card h2 {
+                font-size: 1rem;
+            }
+
+            .product-card p {
+                font-size: 0.85rem;
+            }
+
+            .actions {
+                flex-direction: column;
+                gap: 0.3rem;
+            }
+
+            .actions a {
+                padding: 0.3rem 0.4rem;
+                font-size: 0.75rem;
+            }
+
             footer {
                 padding: 0.8rem;
                 font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 360px) {
+            header {
+                padding: 1rem 0.5rem;
+            }
+
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            header p {
+                font-size: 0.9rem;
+            }
+
+            .filter-box {
+                width: 98%;
+                padding: 0.6rem;
+                gap: 0.6rem;
+            }
+
+            .filter-box input, .filter-box button {
+                padding: 0.5rem;
+                font-size: 0.9rem;
+            }
+
+            .grid {
+                padding: 0.3rem;
+            }
+
+            .product-card {
+                margin: 0 auto 1rem auto;
+                max-width: 100%;
+            }
+
+            .product-card img {
+                height: 120px;
+            }
+
+            .badge {
+                font-size: 0.7rem;
+                padding: 0.2rem 0.6rem;
             }
         }
     </style>
