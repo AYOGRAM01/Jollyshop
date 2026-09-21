@@ -37,6 +37,7 @@
   .cart-table {
     width: 100%;
     border-collapse: collapse;
+    overflow-x: auto;
   }
 
   .cart-table th,
@@ -199,6 +200,158 @@
 
     .cart-hero h1 {
       font-size: 2em;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .cart-hero {
+      padding: 30px 15px;
+    }
+
+    .cart-hero h1 {
+      font-size: 1.8em;
+    }
+
+    .cart-hero p {
+      font-size: 0.9em;
+    }
+
+    .cart-items {
+      margin-bottom: 20px;
+    }
+
+    .cart-header {
+      padding: 15px;
+    }
+
+    .cart-header h2 {
+      font-size: 1.2em;
+    }
+
+    .cart-table {
+      font-size: 12px;
+    }
+
+    .cart-table th,
+    .cart-table td {
+      padding: 10px 5px;
+    }
+
+    .quantity-controls {
+      gap: 5px;
+    }
+
+    .quantity-btn {
+      width: 30px;
+      height: 30px;
+      font-size: 16px;
+    }
+
+    .quantity-display {
+      font-size: 14px;
+      min-width: 35px;
+    }
+
+    .item-total {
+      font-size: 1em;
+    }
+
+    .remove-btn {
+      padding: 6px 12px;
+      font-size: 0.8em;
+    }
+
+    .cart-summary {
+      padding: 20px;
+    }
+
+    .cart-total {
+      font-size: 1.8em;
+    }
+
+    .cart-actions {
+      gap: 10px;
+    }
+
+    .empty-cart {
+      padding: 60px 15px;
+    }
+
+    .empty-cart-icon {
+      font-size: 3em;
+    }
+
+    .empty-cart h2 {
+      font-size: 1.5em;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .cart-hero {
+      padding: 20px 10px;
+    }
+
+    .cart-hero h1 {
+      font-size: 1.5em;
+    }
+
+    .cart-hero p {
+      font-size: 0.85em;
+    }
+
+    .cart-header {
+      padding: 10px;
+    }
+
+    .cart-header h2 {
+      font-size: 1em;
+    }
+
+    .cart-table th,
+    .cart-table td {
+      padding: 8px 3px;
+    }
+
+    .product-name {
+      font-size: 0.9em;
+    }
+
+    .product-price {
+      font-size: 0.9em;
+    }
+
+    .quantity-display {
+      font-size: 12px;
+      min-width: 30px;
+    }
+
+    .item-total {
+      font-size: 0.9em;
+    }
+
+    .remove-btn {
+      padding: 4px 8px;
+      font-size: 0.75em;
+    }
+
+    .cart-summary {
+      padding: 15px;
+    }
+
+    .cart-total {
+      font-size: 1.5em;
+    }
+
+    .empty-cart {
+      padding: 40px 10px;
+    }
+
+    .empty-cart-icon {
+      font-size: 2.5em;
+    }
+
+    .empty-cart h2 {
+      font-size: 1.3em;
     }
   }
 </style>

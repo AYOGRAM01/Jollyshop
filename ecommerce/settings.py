@@ -1,35 +1,48 @@
 from pathlib import Path
 from dotenv import load_dotenv
+import os
 import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 from decouple import config
 
 load_dotenv()
 
-# cloudinary(secure =True)
-
-cloudinary.config(secure=True)
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Cloudinary imports
 
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
+# =========================================================
+# SECURITY
+# =========================================================
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-5evfv#c3z!f=@7by^4jdr0t)n4gnne8_57*_nytb9c*mfjhd%%'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-ALLOWED_HOSTS = []
+
+DEBUG = config('DEBUG', default='True', cast=bool)
+
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'jollyshop.onrender.com',
+]
 
 
-# Application definition
+# =========================================================
+# CLOUDINARY
+# =========================================================
+
+cloudinary.config(
+    cloud_name=("dvfsjrfwn"),
+    api_key=("492472243882776"),
+    api_secret=("Q9NTEvzQnMCMi_4rIzRnU9RwKPk")
+)
+
+
+# =========================================================
+# APPLICATIONS
+# =========================================================
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -39,15 +52,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-    'Mini_catalog',  # Your app for product management
+    'Mini_catalog',
     'cloudinary',
 ]
 
-cloudinary.config(
-    cloud_name=("dvfsjrfwn"),
-    api_key=("492472243882776"),
-    api_secret=("Q9NTEvzQnMCMi_4rIzRnU9RwKPk")
-)
+
+# =========================================================
+# MIDDLEWARE
+# =========================================================
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -59,9 +71,24 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
+# =========================================================
+# CLOUDINARY STORAGE
+# =========================================================
+
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
+
+# =========================================================
+# URL CONFIGURATION
+# =========================================================
+
 ROOT_URLCONF = 'ecommerce.urls'
+
+
+# =========================================================
+# TEMPLATES
+# =========================================================
 
 TEMPLATES = [
     {
@@ -78,11 +105,13 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'ecommerce.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+# =========================================================
+# DATABASE
+# =========================================================
 
 DATABASES = {
     'default': {
@@ -92,8 +121,9 @@ DATABASES = {
 }
 
 
-# Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
+# =========================================================
+# PASSWORD VALIDATION
+# =========================================================
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -111,8 +141,9 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/5.2/topics/i18n/
+# =========================================================
+# INTERNATIONALIZATION
+# =========================================================
 
 LANGUAGE_CODE = 'en-us'
 
@@ -123,24 +154,37 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
+# =========================================================
+# STATIC FILES
+# =========================================================
 
 STATIC_URL = 'static/'
+
 STATICFILES_DIRS = [
-    BASE_DIR / "Mini_catalog/static",
+    BASE_DIR / 'Mini_catalog/static',
 ]
+
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# Media files (User uploaded files)
+
+# =========================================================
+# MEDIA FILES
+# =========================================================
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
+
+# =========================================================
+# DEFAULT PRIMARY KEY
+# =========================================================
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Authentication settings
+
+# =========================================================
+# AUTHENTICATION
+# =========================================================
+
 LOGIN_URL = '/login/'
 LOGOUT_REDIRECT_URL = '/register/'

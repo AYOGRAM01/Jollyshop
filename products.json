@@ -1,0 +1,301 @@
+[
+  {
+    "model": "Mini_catalog.category",
+    "pk": 1,
+    "fields": {
+      "name": "Luxury"
+    }
+  },
+  {
+    "model": "Mini_catalog.category",
+    "pk": 2,
+    "fields": {
+      "name": "Affordable"
+    }
+  },
+  {
+    "model": "Mini_catalog.product",
+    "pk": 1,
+    "fields": {
+      "name": "Balenciaga",
+      "description": "BALENCIAGA Core Sneakers Kids Grand Court K",
+      "price": "40000.00",
+      "discount_percentage": "25.00",
+      "in_stock": true,
+      "category": 2,
+      "image": "image/upload/v1759803370/tbqknej8i3agknrnjarz.jpg",
+      "rating": "4.0",
+      "num_ratings": 27
+    }
+  },
+  {
+    "model": "Mini_catalog.product",
+    "pk": 2,
+    "fields": {
+      "name": "prada",
+      "description": "luxury shoe",
+      "price": "40000.00",
+      "discount_percentage": "20.00",
+      "in_stock": true,
+      "category": 1,
+      "image": "image/upload/v1759804169/z7t0jccv7hfuxhee590f.jpg",
+      "rating": "4.5",
+      "num_ratings": 92
+    }
+  },
+  {
+    "model": "Mini_catalog.product",
+    "pk": 3,
+    "fields": {
+      "name": "Philips",
+      "description": "Philips Essence 10 6.56 HD Punch Hole 64GB ROM / Up to 6G ( 3+3 GB) Extended RAM Android 13 - Timber Black",
+      "price": "109000.00",
+      "discount_percentage": "18.00",
+      "in_stock": true,
+      "category": 1,
+      "image": "image/upload/v1759805362/bsp5k22ndxmldpgwhsku.jpg",
+      "rating": "4.5",
+      "num_ratings": 88
+    }
+  },
+  {
+    "model": "Mini_catalog.product",
+    "pk": 4,
+    "fields": {
+      "name": "Iphone 13 mini",
+      "description": "Luxury phone",
+      "price": "550000.00",
+      "discount_percentage": "30.00",
+      "in_stock": true,
+      "category": 2,
+      "image": "image/upload/v1759802780/zf71pzzgimaun6ljqv6m.jpg",
+      "rating": "3.5",
+      "num_ratings": 49
+    }
+  },
+  {
+    "model": "Mini_catalog.product",
+    "pk": 5,
+    "fields": {
+      "name": "Samsung Galaxy S24 Ultra",
+      "description": "Samsung Galaxy S24 Ultra\r\nPremium performance with a powerful processor and flagship camera system.\r\nVibrant display and long battery life.\r\nS Pen integration for productivity in a sleek design.",
+      "price": "1700000.00",
+      "discount_percentage": "20.00",
+      "in_stock": true,
+      "category": 2,
+      "image": "image/upload/v1758650825/d2tidd9c4t0ipjrhpqzj.jpg",
+      "rating": "3.5",
+      "num_ratings": 13
+    }
+  },
+  {
+    "model": "Mini_catalog.product",
+    "pk": 6,
+    "fields": {
+      "name": "Samsung Galaxy A06",
+      "description": "Samsung Galaxy A06 6.7\" 4GB RAM/64GB ROM Android 14 - Light Blue",
+      "price": "90000.00",
+      "discount_percentage": "20.00",
+      "in_stock": true,
+      "category": 2,
+      "image": "image/upload/v1759803763/avaizn6mftdbpzgkxaqg.jpg",
+      "rating": "4.5",
+      "num_ratings": 52
+    }
+  },
+  {
+    "model": "Mini_catalog.product",
+    "pk": 7,
+    "fields": {
+      "name": "Mateamoda",
+      "description": "Mateamoda Women Tight Skirts Dresses High Waist Skirts Shorts Ladies Skirts",
+      "price": "10000.00",
+      "discount_percentage": "5.00",
+      "in_stock": true,
+      "category": 2,
+      "image": "image/upload/v1759803876/sys7vd2aieqd0bmulos9.jpg",
+      "rating": "4.5",
+      "num_ratings": 99
+    }
+  },
+  {
+    "model": "Mini_catalog.product",
+    "pk": 8,
+    "fields": {
+      "name": "Poco",
+      "description": "Poco C75 6.88\" 6GB RAM / 128GB ROM Android 14 - Black",
+      "price": "80000.00",
+      "discount_percentage": "20.00",
+      "in_stock": true,
+      "category": 2,
+      "image": "image/upload/v1759804713/egdqut82jniywacwq7pm.jpg",
+      "rating": "5.0",
+      "num_ratings": 68
+    }
+  },
+  {
+    "model": "Mini_catalog.product",
+    "pk": 9,
+    "fields": {
+      "name": "Itel",
+      "description": "itel City 100 7.65mm\" Slim Design 5200mah Android 128/4+8gb -Free Mag Speaker",
+      "price": "90000.00",
+      "discount_percentage": "20.00",
+      "in_stock": true,
+      "category": 2,
+      "image": "image/upload/v1759804673/usbdyqwpxdihm4gvxjz9.jpg",
+      "rating": "5.0",
+      "num_ratings": 14
+    }
+  },
+  {
+    "model": "Mini_catalog.product",
+    "pk": 10,
+    "fields": {
+      "name": "LG SMART TV 43 INCHES",
+      "description": "LG 43'' Inch Smart TV With Satellite Receiver",
+      "price": "500000.00",
+      "discount_percentage": "3.00",
+      "in_stock": true,
+      "category": 2,
+      "image": "image/upload/v1759972153/fvpkfwznr5hu8jzc323h.jpg",
+      "rating": "4.0",
+      "num_ratings": 10
+    }
+  },
+  {
+    "model": "Mini_catalog.product",
+    "pk": 11,
+    "fields": {
+      "name": "Berrykey",
+      "description": "Berrykey Men's Hawaiian Ink Print Bottom-Down Beach Short Sleeve T-Shirt Casual Tops",
+      "price": "15000.00",
+      "discount_percentage": "30.00",
+      "in_stock": true,
+      "category": 2,
+      "image": "image/upload/v1759974442/a4mcmxtzwtgviclyncab.jpg",
+      "rating": "5.0",
+      "num_ratings": 18
+    }
+  },
+  {
+    "model": "Mini_catalog.product",
+    "pk": 12,
+    "fields": {
+      "name": "Machislet",
+      "description": "Machislet Europe And The United States Women's Fashion Long Sleeve Loose Dreeses",
+      "price": "14000.00",
+      "discount_percentage": "40.00",
+      "in_stock": true,
+      "category": 2,
+      "image": "image/upload/v1759974525/c6kfpxv0vguyc1s8taid.jpg",
+      "rating": "4.5",
+      "num_ratings": 41
+    }
+  },
+  {
+    "model": "Mini_catalog.product",
+    "pk": 13,
+    "fields": {
+      "name": "Oraimo",
+      "description": "Oraimo FreePods Neo ENC True Wireless E-ar-buds",
+      "price": "41000.00",
+      "discount_percentage": "54.00",
+      "in_stock": true,
+      "category": 2,
+      "image": "image/upload/v1759974636/jyt6zssgfkxbrgl3h58r.jpg",
+      "rating": "4.0",
+      "num_ratings": 76
+    }
+  },
+  {
+    "model": "Mini_catalog.product",
+    "pk": 14,
+    "fields": {
+      "name": "Elegant Gown",
+      "description": "Elegant And Stylish Fashionable Gown",
+      "price": "9500.00",
+      "discount_percentage": "0.00",
+      "in_stock": true,
+      "category": 2,
+      "image": "image/upload/v1759974728/jyxswtwvv58crlfnikgo.jpg",
+      "rating": "4.5",
+      "num_ratings": 86
+    }
+  },
+  {
+    "model": "Mini_catalog.product",
+    "pk": 15,
+    "fields": {
+      "name": "Women shorts",
+      "description": "Women Sexy Shorts Belly-control Tight-fitting Quick-drying - Grey",
+      "price": "6300.00",
+      "discount_percentage": "50.00",
+      "in_stock": true,
+      "category": 2,
+      "image": "image/upload/v1759974850/fnjawqibuq64czzlr50f.jpg",
+      "rating": "3.0",
+      "num_ratings": 23
+    }
+  },
+  {
+    "model": "Mini_catalog.product",
+    "pk": 16,
+    "fields": {
+      "name": "Glenlivet whisky",
+      "description": "The Glenlivet Whisky 18 Year Old - 70cl",
+      "price": "163000.00",
+      "discount_percentage": "14.00",
+      "in_stock": true,
+      "category": 1,
+      "image": "image/upload/v1759974957/okfhbroinyk77ho1qwva.jpg",
+      "rating": "3.5",
+      "num_ratings": 37
+    }
+  },
+  {
+    "model": "Mini_catalog.library",
+    "pk": 1,
+    "fields": {
+      "title": "Samsung Galaxy S24 Ultra",
+      "description": "Samsung Galaxy S24 Ultra has a Premium performance with a powerful processor and flagship camera system. Vibrant display and long battery life. S Pen integration for productivity in a sleek design.",
+      "imagee": "image/upload/v1758647833/wpaihf4oefkdv5uuzegr.jpg"
+    }
+  },
+  {
+    "model": "Mini_catalog.library",
+    "pk": 2,
+    "fields": {
+      "title": "Shoe",
+      "description": "A lightweight, versatile shoe designed for daily comfort and everyday wear, featuring breathable upper material, cushioned insole, and flexible outsole for all-day support.",
+      "imagee": "image/upload/v1758648482/x9dgvu2gzsv3o9qkbz44.png"
+    }
+  },
+  {
+    "model": "Mini_catalog.library",
+    "pk": 8,
+    "fields": {
+      "title": "LG TV",
+      "description": "LG 43'' Inch Smart TV With Satellite Receiver",
+      "imagee": "image/upload/v1759972463/f466ezivgmd2wwr2tipj.jpg"
+    }
+  },
+  {
+    "model": "Mini_catalog.library",
+    "pk": 9,
+    "fields": {
+      "title": "Berrykey",
+      "description": "Berrykey Men's Hawaiian Ink Print Bottom-Down Beach Short Sleeve T-Shirt Casual Tops",
+      "imagee": "image/upload/v1759974360/kijilkpeltdstylhhpxz.jpg"
+    }
+  },
+  {
+    "model": "Mini_catalog.library",
+    "pk": 10,
+    "fields": {
+      "title": "ORAIMO",
+      "description": "Oraimo FreePods Neo ENC True Wireless E-ar-buds",
+      "imagee": "image/upload/v1759975451/m6br6bubi2lm29j7lp9x.jpg"
+    }
+  }
+]
